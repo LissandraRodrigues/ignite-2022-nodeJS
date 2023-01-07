@@ -14,21 +14,22 @@ app.get('/register', (request, response) => {
 });
 
 app.post('/register', (request, response) => {
-    const { name, email, cpf } = request.body;
-    console.log(name);
-    console.log(email);
-    console.log(cpf);
+    const { name, cpf } = request.body;
+  
+    const customerAlreadyExists = customers.some((customer) => customer.cpf === cpf);
 
-    const id = uuidv4();
+    if (customerAlreadyExists) {
+        return response.status(400).json({ error: "Customer already exists!" });
+    }
 
     customers.push({
         cpf,
         name,
-        id,
+        id: uuidv4(),
         statement: []
     });
 
-    return response.status(201).send("Usuário criado com sucesso!");
+    return response.status(201).json({ message: "Usuário criado com sucesso!" });
 });
 
 app.listen(port, () => {
