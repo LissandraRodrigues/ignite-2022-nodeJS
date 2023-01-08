@@ -9,17 +9,31 @@ const port = 3333;
 
 const customers = [];
 
-app.get('/register', (request, response) => {
-    response.json(customers);
-});
+// Middleware.
+function verifyIfExistsAccountCPF(request, response, next) {
+    
+    const { cpf } = request.headers;
 
-app.post('/register', (request, response) => {
+    const customer = customers.find(customer => customer.cpf === cpf);
+
+    if (!customer) {
+        return response.status(400).json({ error: "Customer not found." });
+    } 
+
+    // Repassa o customer para a função que chamou o Middleware.
+    request.customer = customer;
+
+    return next();
+
+}
+
+app.post('/account', (request, response) => {
     const { name, cpf } = request.body;
   
     const customerAlreadyExists = customers.some((customer) => customer.cpf === cpf);
 
     if (customerAlreadyExists) {
-        return response.status(400).json({ error: "Customer already exists!" });
+        return response.status(400).json({ error: "Customer already exists." });
     }
 
     customers.push({
@@ -29,7 +43,19 @@ app.post('/register', (request, response) => {
         statement: []
     });
 
-    return response.status(201).json({ message: "Usuário criado com sucesso!" });
+    return response.status(201).json({ message: "User successfully created." });
+});
+
+app.get('/', (request, response) => {
+    response.json(customers);
+});
+
+app.get('/statement', verifyIfExistsAccountCPF,  (request, response) => {
+    
+    const { customer } = request;
+
+    return response.json(customer.statement);
+
 });
 
 app.listen(port, () => {
