@@ -1,4 +1,4 @@
-import { ISpeficationRepository } from "../modules/cars/repositories/ISpeficationRepository";
+import { ISpecificationsRepository } from "../repositories/ISpecificationsRepository";
 
 interface IRequest {
     name: string;
@@ -8,7 +8,7 @@ interface IRequest {
 class CreateSpecificationService {
 
     // Make the route that has to pass access to the repository.
-    constructor(private specificationsRepository: ISpeficationRepository) { }
+    constructor(private specificationsRepository: ISpecificationsRepository) { }
 
     execute({ name, description }: IRequest): void {
 
