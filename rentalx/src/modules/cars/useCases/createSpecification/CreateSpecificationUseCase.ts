@@ -1,11 +1,11 @@
-import { ISpecificationsRepository } from "../repositories/ISpecificationsRepository";
+import { ISpecificationsRepository } from "../../repositories/ISpecificationsRepository";
 
 interface IRequest {
     name: string;
     description: string;
 }
 
-class CreateSpecificationService {
+class CreateSpecificationUseCase {
 
     // Make the route that has to pass access to the repository.
     constructor(private specificationsRepository: ISpecificationsRepository) { }
@@ -19,8 +19,8 @@ class CreateSpecificationService {
         }
 
         this.specificationsRepository.create({ name, description });
-
     }
+
 }
 
-export { CreateSpecificationService };
+export { CreateSpecificationUseCase };
