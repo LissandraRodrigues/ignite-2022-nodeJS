@@ -20,6 +20,9 @@ class User {
     driver_license: string;
 
     @Column()
+    password: string;
+
+    @Column()
     isAdmin: boolean;
 
     @CreateDateColumn()
